@@ -4,21 +4,33 @@
     <script src="https://unpkg.com/html5-qrcode"></script>
   </head>
   <body>
-    <div id="qr-reader" style="width: 100%"></div>
-    <div id="qr-reader-results"></div>
+    <div id="qr-reader" style="width: 500px; margin: 0px auto"></div>
+    <h1 id="qr-reader-results" style="text-align: center">Resultado</h1>
+    <div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
-      var html5QrcodeScanner = new Html5QrcodeScanner(
-        "qr-reader", { fps: 10, qrbox: 250 });
+      var html5QrcodeScanner = new Html5QrcodeScanner("qr-reader", {
+        fps: 10,
+        qrbox: 250,
+      });
       html5QrcodeScanner.render(onScanSuccess, onScanError);
 
-      function onScanSuccess(qrCodeMessage) {
+      function onScanSuccess(decodedText, decodedResult) {
+        console.log(`Code matched = ${decodedText}`, decodedResult);
         // handle on success condition with the decoded message
-        document.getElementById("qr-reader-results").innerHTML = qrCodeMessage;
+        // document.getElementById("qr-reader-results").innerHTML = decodedText;
+        fetch("https://jsonplaceholder.typicode.com/todos/1")
+          .then((response) => response.json())
+          .then((json) => {
+            document.getElementById("qr-reader-results").innerHTML = 'Algum dado vindo de alguma API Legal: ' + json.title;
+          });
       }
 
       function onScanError(errorMessage) {
         // handle on error condition, with error message
-        console.log(errorMessage);
+        // console.log(errorMessage);
       }
     </script>
   </body>
