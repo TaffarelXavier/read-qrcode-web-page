@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barcode Scanner</title>
+    <script src="https://cdn.jsdelivr.net/npm/quagga/dist/quagga.min.js"></script>
+</head>
+<body>
+    <h1>Barcode Scanner</h1>
+    <div id="barcode-scanner"></div>
+
+    <script>
+        Quagga.init({
+            inputStream : {
+                name : "Live",
+                type : "LiveStream",
+                target: document.querySelector('#barcode-scanner'),
+                constraints: {
+                    width: 640,
+                    height: 480,
+                    facingMode: "environment"
+                },
+            },
+            decoder : {
+                readers : ["ean_reader"] // Pode usar outros tipos de leitores, como "code_128_reader", "upc_reader", etc.
+            }
+        }, function(err) {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            console.log("Initialization finished. Ready to start");
+            Quagga.start();
+        });
+
+        Quagga.onDetected(function(result) {
+            console.log("Barcode detected and processed : [" + result.codeResult.code + "]", result);
+            // Aqui você pode lidar com o código de barras detectado como quiser
+        });
+    </script>
+</body>
+</html>
